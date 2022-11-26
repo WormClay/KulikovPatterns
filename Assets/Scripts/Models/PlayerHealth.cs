@@ -4,16 +4,19 @@ namespace Asteroids
     {
         private float _maxHealth;
         private float _currentHealth;
+        private UIHealth _uiHelth;
 
         public PlayerHealth(float hp) 
         {
             _maxHealth = hp;
             _currentHealth = hp;
+            _uiHelth = new UIHealth(hp);
         }
 
         public bool Damage(float damage)
         {
             _currentHealth -= damage;
+            _uiHelth.SetHelth(_currentHealth);
             return _currentHealth <= 0;
         }
 
@@ -22,6 +25,7 @@ namespace Asteroids
             _currentHealth += value;
             if (_currentHealth > _maxHealth) 
                 _currentHealth = _maxHealth;
+            _uiHelth.SetHelth(_currentHealth);
         }
     }
 }

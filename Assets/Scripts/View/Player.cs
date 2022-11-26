@@ -6,15 +6,16 @@ namespace Asteroids
         [SerializeField] private float _speed;
         [SerializeField] private float _acceleration;
         [SerializeField] private float _hp;
-        [SerializeField] private Rigidbody2D _bullet;
         [SerializeField] private Transform _barrel;
         [SerializeField] private float _force;
-        [SerializeField] private float _damage;
+        //[SerializeField] private float _damage;
+        [SerializeField] private GameSettings _mainSettings;
 
         private Ship _ship;
         public InputController InputControllerProp { get; private set; }
         public ShootingController ShootingControllerProp { get; private set; }
-        private PlayerHealth playerHealth;
+        private PlayerHealth _playerHealth;
+        private PoolContainer _bulletsPool;
 
         private void Awake()
         {
@@ -23,20 +24,27 @@ namespace Asteroids
             _ship = new Ship(moveBody, rotation);
             InputControllerProp = new InputController(_ship, transform);
             ShootingControllerProp = new ShootingController(this);
-            playerHealth = new PlayerHealth(_hp);
+            _playerHealth = new PlayerHealth(_hp);
+            _bulletsPool = new PoolContainer(_mainSettings.BulletName, _mainSettings.BulletRootName, 10);
         }
 
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (playerHealth.Damage(_damage))
-                Destroy(gameObject);
+            if (other.gameObject.TryGetComponent(out IDamage damageOwner))
+            {
+                if (_playerHealth.Damage(damageOwner.DamagePower))
+                    gameObject.SetActive(false);
+            }
         }
 
         public void Fire()
         {
-            var temAmmunition = Instantiate(_bullet, transform.position, transform.rotation);
-            temAmmunition.AddForce(transform.up * _force);
+            var temAmmunition = _bulletsPool.Get(_barrel);
+            if (temAmmunition.TryGetComponent(out IBullet bullet))
+            {
+                bullet.Go(transform.up * _force);
+            }
         }
     }
 }
