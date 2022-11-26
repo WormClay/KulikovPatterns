@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 575764507481406749}
   - component: {fileID: 575764507481406751}
   - component: {fileID: 575764507481406744}
+  - component: {fileID: -6880803119087467256}
   m_Layer: 0
   m_Name: SpaceShip
   m_TagString: Untagged
@@ -123,9 +124,26 @@ MonoBehaviour:
   _speed: 2000
   _acceleration: 3000
   _hp: 10
-  _bullet: {fileID: -3503715296368999732, guid: 8286db56e02a76b4e8fd25564b975f4a, type: 3}
   _barrel: {fileID: 575764507706723621}
   _force: 10
+  _damage: 1
+  _mainSettings: {fileID: 11400000, guid: 98f7f2d424b4382439147cd9d955fede, type: 2}
+--- !u!58 &-6880803119087467256
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 575764507481406748}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.01
 --- !u!1 &575764507706723620
 GameObject:
   m_ObjectHideFlags: 0
