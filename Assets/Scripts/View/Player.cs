@@ -8,14 +8,13 @@ namespace Asteroids
         [SerializeField] private float _hp;
         [SerializeField] private Transform _barrel;
         [SerializeField] private float _force;
-        //[SerializeField] private float _damage;
         [SerializeField] private GameSettings _mainSettings;
 
         private Ship _ship;
         public InputController InputControllerProp { get; private set; }
         public ShootingController ShootingControllerProp { get; private set; }
         private PlayerHealth _playerHealth;
-        private PoolContainer _bulletsPool;
+        //private PoolContainer _bulletsPool;
 
         private void Awake()
         {
@@ -25,7 +24,8 @@ namespace Asteroids
             InputControllerProp = new InputController(_ship, transform);
             ShootingControllerProp = new ShootingController(this);
             _playerHealth = new PlayerHealth(_hp);
-            _bulletsPool = new PoolContainer(_mainSettings.BulletName, _mainSettings.BulletRootName, 10);
+            //_bulletsPool = new PoolContainer(_mainSettings.BulletName, _mainSettings.BulletRootName, 10);
+            ServiceLocator.SetService<IService>(new PoolContainerForBuilder(_mainSettings.SpriteBulletPath, _mainSettings.BulletRootName, 10));
         }
 
 
@@ -40,7 +40,8 @@ namespace Asteroids
 
         public void Fire()
         {
-            var temAmmunition = _bulletsPool.Get(_barrel);
+            //var temAmmunition = _bulletsPool.Get(_barrel);
+            var temAmmunition = ServiceLocator.Resolve<IService>().Get(_barrel);
             if (temAmmunition.TryGetComponent(out IBullet bullet))
             {
                 bullet.Go(transform.up * _force);

@@ -7,7 +7,7 @@ namespace Asteroids
     {
         [SerializeField] private float _lifeTime;
         private Rigidbody2D rigidbody2D;
-        private PoolObject poolObject;
+        private PoolObjectForBuilder poolObject;
         [SerializeField] private float _damagePower;
         public float DamagePower { get { return _damagePower; }  }
 
@@ -42,6 +42,12 @@ namespace Asteroids
         {
             StopCoroutine(Life());
             poolObject?.Recycle();
+        }
+
+        public void Init(float lifeTime, float damagePower) 
+        {
+            _lifeTime = lifeTime;
+            _damagePower = damagePower;
         }
     }
 }

@@ -17,8 +17,8 @@ namespace Asteroids
         {
             _listExecute = new ListExecute();
             _player = Instantiate(Resources.Load<Player>(_mainSettings.SpaceShipName));
-            _asteroidFactory = new AsteroidFactory();
-            _enemyShipFactory = new EnemyShipFactory();
+            _asteroidFactory = new AsteroidFactory(new EnemyHealth(1), 2);
+            _enemyShipFactory = new EnemyShipFactory(new EnemyHealth(2), 5);
         }
 
         private void Start()
@@ -36,8 +36,8 @@ namespace Asteroids
 
             if ((_lastSpawnerTime + _spawnerTimeStep) < Time.time)
             {
-                EnemySpawner();
                 _lastSpawnerTime = Time.time;
+                EnemySpawner();
             }
         }
 
@@ -48,12 +48,13 @@ namespace Asteroids
         {
             if (Random.Range(0, 4) != 3)
             {
-                var enemy = _asteroidFactory.Create(new EnemyHealth(2), 2);
-                enemy.transform.position = new Vector3(Random.Range(-18, 19), 12, 0);
+                int a = Random.Range(-18, 19);
+                var enemy = _asteroidFactory.Create();
+                enemy.transform.position = new Vector3(a, 12, 0);
             }
             else
             {
-                var enemy = _enemyShipFactory.Create(new EnemyHealth(3), 5);
+                var enemy = _enemyShipFactory.Create();
                 enemy.transform.position = new Vector3(Random.Range(-18, 19), 12, 0);
             }
         }

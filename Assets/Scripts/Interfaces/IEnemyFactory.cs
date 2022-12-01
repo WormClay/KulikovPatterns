@@ -4,6 +4,7 @@ namespace Asteroids
 {
     public interface IEnemyFactory
     {
-        Enemy Create(EnemyHealth hp, float damagePower);
+        //Enemy Create(EnemyHealth hp, float damagePower);
+        Enemy Create();
     }
 }

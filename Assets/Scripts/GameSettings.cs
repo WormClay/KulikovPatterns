@@ -8,6 +8,8 @@ namespace Asteroids
         public string SpaceShipName = "SpaceShip";
         public string BulletName = "Bullet";
         public string BulletRootName = "Bullets";
+        public string SpriteBulletPath = "BulletSprite";
+
     }
 }
 

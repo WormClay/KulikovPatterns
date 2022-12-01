@@ -1,5 +1,8 @@
+using System;
+
 namespace Asteroids
 {
+    [Serializable]
     public sealed class EnemyHealth
     {
         public float MaxHealth { get; }
