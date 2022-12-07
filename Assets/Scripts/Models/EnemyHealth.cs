@@ -9,7 +9,6 @@ namespace Asteroids
             MaxHealth = hp;
             CurrentHealth = hp;
         }
-
         public bool Damage(float damage)
         {
             CurrentHealth -= damage;

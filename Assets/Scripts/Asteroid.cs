@@ -5,17 +5,9 @@ namespace Asteroids
 {
     public sealed class Asteroid : Enemy
     {
-        private float _lifeTime = 3f;
-
-        private void Start()
+        public Asteroid(float damagePower, EnemyHealth hp, int pointsForDie, EnemyView prefab, Vector3 position, Transform parent) 
+            :base(hp, damagePower, pointsForDie, prefab, position, parent)
         {
-            StartCoroutine(Life());
-        }
-
-        IEnumerator Life()
-        {
-            yield return new WaitForSeconds(_lifeTime);
-            Destroy(gameObject);
         }
     }
 }

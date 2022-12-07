@@ -1,3 +1,5 @@
+using System;
+
 namespace Asteroids
 {
     public class PlayerHealth
@@ -22,7 +24,7 @@ namespace Asteroids
 
         public void Med(float value) 
         {
-            _currentHealth += value;
+            _currentHealth += Math.Abs(value);
             if (_currentHealth > _maxHealth) 
                 _currentHealth = _maxHealth;
             _uiHelth.SetHelth(_currentHealth);

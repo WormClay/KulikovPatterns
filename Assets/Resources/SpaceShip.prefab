@@ -126,7 +126,6 @@ MonoBehaviour:
   _hp: 10
   _barrel: {fileID: 575764507706723621}
   _force: 10
-  _damage: 1
   _mainSettings: {fileID: 11400000, guid: 98f7f2d424b4382439147cd9d955fede, type: 2}
 --- !u!58 &-6880803119087467256
 CircleCollider2D:
