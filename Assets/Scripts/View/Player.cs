@@ -24,7 +24,7 @@ namespace Asteroids
             var rotation = new RotationShip(transform);
             _ship = new Ship(moveBody, rotation);
             _weapon = new Weapon(_mainSettings, _barrel, _force);
-            _unlockWeapon = new UnlockWeapon(false);
+            _unlockWeapon = new UnlockWeapon(true);
             _weaponProxy = new WeaponProxy(_weapon, _unlockWeapon);
             InputControllerProp = new InputController(_ship, transform);
             ShootingControllerProp = new ShootingController(this, _unlockWeapon);
@@ -44,6 +44,11 @@ namespace Asteroids
         public void Fire()
         {
             _weaponProxy.Fire();
+        }
+
+        public void Med(float value) 
+        {
+            _playerHealth.Med(value);
         }
     }
 }

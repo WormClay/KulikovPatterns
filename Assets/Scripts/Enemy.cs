@@ -1,41 +1,84 @@
+using System;
 using UnityEngine;
+using Asteroids.Iterator;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Asteroids
 {
-    public abstract class Enemy : MonoBehaviour, IDamage
+    public abstract class Enemy : IEnemy
     {
-        //public static IEnemyFactory Factory;
-        public float DamagePower { get; private set; }
-        public EnemyHealth Health { get; protected set; }
-        public static Asteroid CreateAsteroidEnemy(EnemyHealth hp, float damagePower)
+        public int PointsForDie { get { return _enemyModel.PointsForDie; } }
+        public event Action<Enemy> EnemyDied;
+        public bool IsKilled { get; protected set; } = false;
+        private EnemyView _enemyView;
+        private EnemyModel _enemyModel;
+        public Enemy(EnemyHealth hp, float damagePower, int pointsForDie, EnemyView prefab, Vector3 position, Transform parent) 
         {
-            var enemy = Instantiate(Resources.Load<Asteroid>("Asteroid"));
-            enemy.Init(hp, damagePower);
-            return enemy;
+            _enemyView = UnityEngine.Object.Instantiate(prefab, position, Quaternion.identity, parent);
+            _enemyView.DamagePower = damagePower;
+            _enemyModel = new EnemyModel(hp, damagePower, pointsForDie);
+            _enemyView.EventDamage += OnDamage;
+            _enemyView.EventDestroy += OnDestroyView;
         }
-
-        public static EnemyShip CreateEnemyShip(EnemyHealth hp, float damagePower)
+        private void OnDamage(float damage) 
         {
-            var enemy = Instantiate(Resources.Load<EnemyShip>("EnemyShip"));
-            enemy.Init(hp, damagePower);
-            return enemy;
-        }
-
-        public void Init(EnemyHealth hp, float damagePower)
-        {
-            Health = hp;
-            DamagePower = damagePower;
-        }
-
-        private void OnCollisionEnter2D(Collision2D other)
-        {
-            if (other.gameObject.TryGetComponent(out IDamage damageOwner))
+            if (_enemyModel.Health.Damage(damage))
             {
-                if (Health.Damage(damageOwner.DamagePower))
-                    Destroy(gameObject);
+                IsKilled = true;
+                UnityEngine.Object.Destroy(_enemyView.gameObject);
             }
-            if (other.gameObject.TryGetComponent(out Player _))
+        }
+        private void OnDestroyView()
+        {
+            _enemyView.EventDamage -= OnDamage;
+            _enemyView.EventDestroy -= OnDestroyView;
+            EnemyDied?.Invoke(this);
+        }
+        public void DestroyOverTime(float time) 
+        {
+            UnityEngine.Object.Destroy(_enemyView.gameObject, time);
+        }
+
+        //Iterator
+
+        private List<IAbility> _ability;
+        public void SetAbility(List<IAbility> ability)
+        {
+            _ability = ability;
+        }
+        public IAbility this[int index] => _ability[index];
+        public string this[Target index]
+        {
+            get
             {
-                    Destroy(gameObject);
+                var ability = _ability.FirstOrDefault(a => a.Target == index);
+                return ability == null ? "Not supported" : ability.ToString();
+            }
+        }
+        public int MaxDamage => _ability.Select(a => a.Damage).Max();
+        public IEnumerable<IAbility> GetAbility()
+        {
+            while (true)
+            {
+                yield return _ability[UnityEngine.Random.Range(0, _ability.Count)];
+            }
+        }
+        public IEnumerator<IAbility> GetEnumerator()
+        {
+            for (int i = 0; i < _ability.Count; i++)
+            {
+                yield return _ability[i];
+            }
+        }
+        public IEnumerable<IAbility> GetAbility(DamageType index)
+        {
+            foreach (IAbility ability in _ability)
+            {
+                if (ability.DamageType == index)
+                {
+                    yield return ability;
+                }
             }
         }
 

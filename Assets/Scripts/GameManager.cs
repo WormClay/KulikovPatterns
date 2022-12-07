@@ -9,6 +9,7 @@ namespace Asteroids
         private ListExecute _listExecute;
         private Player _player;
         private GameService _gameService;
+        private int _startPoints = 0;
 
         private void Awake()
         {
@@ -19,7 +20,7 @@ namespace Asteroids
 
         private void Start()
         {
-            _gameService.Start(_player, _listExecute);
+            _gameService.Start(_player, _listExecute, _startPoints, transform);
         }
 
         private void Update()
