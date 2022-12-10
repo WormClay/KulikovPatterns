@@ -9,5 +9,9 @@ namespace Asteroids
             : base(hp, damagePower, pointsForDie, prefab, position, parent)
         {
         }
+        public override void Activate(IEnemyVisitor value)
+        {
+            value?.Visit(this);
+        }
     }
 }

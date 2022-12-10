@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Asteroids
 {
-    public abstract class Enemy : IEnemy
+    public abstract class Enemy : IEnemy, IDie
     {
         public int PointsForDie { get { return _enemyModel.PointsForDie; } }
         public event Action<Enemy> EnemyDied;
@@ -39,6 +39,7 @@ namespace Asteroids
         {
             UnityEngine.Object.Destroy(_enemyView.gameObject, time);
         }
+        public abstract void Activate(IEnemyVisitor value);
 
         //Iterator
 

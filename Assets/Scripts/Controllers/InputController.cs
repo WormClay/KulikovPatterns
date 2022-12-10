@@ -17,11 +17,14 @@ namespace Asteroids
             _camera = Camera.main;
         }
 
+        public float GetHorizontal() => Input.GetAxis(Horizontal);
+        public float GetVertical() => Input.GetAxis(Vertical);
+
         public void Execute()
         {
             var direction = Input.mousePosition - _camera.WorldToScreenPoint(_transform.position);
             _ship.Rotation(direction);
-            _ship.Move(Input.GetAxis(Horizontal), Input.GetAxis(Vertical), Time.deltaTime);
+            /*_ship.Move(Input.GetAxis(Horizontal), Input.GetAxis(Vertical), Time.deltaTime);
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 _ship.AddAcceleration();
@@ -29,7 +32,7 @@ namespace Asteroids
             if (Input.GetKeyUp(KeyCode.LeftShift))
             {
                 _ship.RemoveAcceleration();
-            }
+            }*/
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Asteroids
             listExecute.Add(player.InputControllerProp);
             listExecute.Add(player.ShootingControllerProp);
             listExecute.Add(_enemyController);
+            listExecute.Add(player);
         }
     }
 }

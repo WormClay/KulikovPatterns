@@ -1,7 +1,8 @@
 using UnityEngine;
+using TMPro;
 namespace Asteroids
 {
-    internal sealed class Player : MonoBehaviour, IFire
+    public sealed class Player : MonoBehaviour, IFire, IExecute
     {
         [SerializeField] private float _speed;
         [SerializeField] private float _acceleration;
@@ -17,6 +18,8 @@ namespace Asteroids
         private Weapon _weapon;
         private UnlockWeapon _unlockWeapon;
         private WeaponProxy _weaponProxy;
+        private IState _state;
+        private TMP_Text _textState;
 
         private void Awake()
         {
@@ -29,6 +32,8 @@ namespace Asteroids
             InputControllerProp = new InputController(_ship, transform);
             ShootingControllerProp = new ShootingController(this, _unlockWeapon);
             _playerHealth = new PlayerHealth(_hp);
+            _state = new IdleState(this);
+            _textState = GameObject.Find("State").GetComponent<TextMeshProUGUI>();
         }
 
 
@@ -50,5 +55,18 @@ namespace Asteroids
         {
             _playerHealth.Med(value);
         }
+
+        public void SetState(IState newState)
+        {
+            _state = newState;
+        }
+
+        public void Execute()
+        {
+            _state.HandleInput();
+            _textState.text = $"State: {_state}";
+        }
+
+        public Ship GetShip() => _ship;
     }
 }
